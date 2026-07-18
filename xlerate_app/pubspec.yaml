@@ -1,0 +1,30 @@
+name: xlerate
+description: "XLerate is an all-in-one Community Event Companion and Productivity Hub designed specifically for the Excelerate ecosystem. It seamlessly bridges the gap between event discovery and personal time management by allowing learners to browse workshops, register instantly, sync events directly to a built-in productivity calendar, and submit structured feedback. Concurrently, it provides administrators with a robust dashboard to seamlessly publish programs, broadcast announcements, manage participant tracks, and evaluate real-time survey metrics"
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  carousel_slider: ^5.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  # assets:
+  #   - images/a_dot_burr.jpeg
+  #   - images/a_dot_ham.jpeg

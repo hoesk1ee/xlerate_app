@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:xlerate/presentation/pages/dashboard/dashboard_page.dart';
-import 'package:xlerate/presentation/pages/login_page.dart';
+import 'package:learners_app/features/profile/profile_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,30 +11,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Learner App',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
-        scaffoldBackgroundColor: const Color(
-          0xFFF8F9FA,
-        ),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blueAccent,
-          surface: const Color(
-            0xFFF8F9FA,
-          ),
-        ),
-
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFF8F9FA),
-          elevation: 0,
-          iconTheme: IconThemeData(color: Colors.black),
-          titleTextStyle: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
       ),
-      home: LoginPage(),
+      home: const ProfileScreen(),
     );
   }
 }
