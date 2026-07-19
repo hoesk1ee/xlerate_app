@@ -4,19 +4,19 @@ class Program {
   final String title;
   final String description;
   final String host;
-  final String? speaker; // New
-  final String startDate; // Updated from 'date'
-  final String? endDate; // New (for multi-day)
+  final String? speaker;
+  final String startDate;
+  final String? endDate;
   final String time;
-  final String locationType; // New (In-Person, Virtual, Hybrid)
+  final String locationType;
   final String location;
   final String tag;
-  final List<String> skills; // New
-  final String eligibility; // New
-  final bool isFree; // New
-  final double fee; // New
-  final bool offersCertificate; // New
-  final bool offersBadge; // New
+  final List<String> skills;
+  final String eligibility;
+  final bool isFree;
+  final double fee;
+  final bool offersCertificate;
+  final bool offersBadge;
   final String imageUrl;
   final File? imageFile;
 
@@ -42,5 +42,4 @@ class Program {
   });
 }
 
-// The Global List starts completely EMPTY
 List<Program> globalPrograms = [];

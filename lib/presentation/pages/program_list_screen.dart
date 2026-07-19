@@ -41,7 +41,6 @@ class _ProgramListScreenState extends State<ProgramListScreen>
     'Misc',
   ];
 
-  // Animation Controller for the staggered list
   late AnimationController _animationController;
 
   @override
@@ -79,7 +78,6 @@ class _ProgramListScreenState extends State<ProgramListScreen>
       }).toList();
     });
 
-    // Restart the animation every time the list is filtered
     _animationController.reset();
     _animationController.forward();
   }
@@ -190,7 +188,6 @@ class _ProgramListScreenState extends State<ProgramListScreen>
             ),
             const SizedBox(height: 20),
 
-            // Animated Category Chips
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
@@ -287,7 +284,6 @@ class _ProgramListScreenState extends State<ProgramListScreen>
     );
   }
 
-  // Animated Filter Chip
   Widget _buildAnimatedFilterChip(String label) {
     final isSelected = _selectedCategory == label;
 
@@ -345,7 +341,6 @@ class _ProgramListScreenState extends State<ProgramListScreen>
     return Icons.location_on_outlined;
   }
 
-  // UPDATED COMPACT UI CARD WITH BRAND GRADIENT TITLE AND BORDER
   Widget _buildProgramCard(Program program) {
     final dateText = program.endDate != null
         ? '${program.startDate} - ${program.endDate}'
@@ -383,18 +378,16 @@ class _ProgramListScreenState extends State<ProgramListScreen>
         ),
         padding: const EdgeInsets.all(1.5), // This acts as the border thickness
         child: Container(
-          // 2. COMPACT INTERNAL PADDING (reduced from 14 to 10)
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(
               14.5,
-            ), // Inner radius to match outer
+            ),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // LEFT SIDE: Image (Scaled down to 75x75 to save height)
               Container(
                 width: 75,
                 height: 75,
@@ -437,24 +430,19 @@ class _ProgramListScreenState extends State<ProgramListScreen>
                 ),
               ),
               const SizedBox(width: 12),
-
-              // RIGHT SIDE: The Data Hierarchy
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // TOP ROW: Event Name (GRADIENT TEXT) and Price Badge
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // 3. GRADIENT EVENT TITLE
                         Expanded(
                           child: ShaderMask(
                             shaderCallback: (bounds) =>
                                 _brandGradient.createShader(bounds),
                             child: Text(
                               program.title,
-                              // Font size remains untouched!
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
@@ -468,12 +456,11 @@ class _ProgramListScreenState extends State<ProgramListScreen>
                           ),
                         ),
                         const SizedBox(width: 8),
-                        // Gradient Price Badge
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
                             vertical: 4,
-                          ), // slightly tighter
+                          ),
                           decoration: BoxDecoration(
                             gradient: program.isFree ? null : _brandGradient,
                             color: program.isFree ? Colors.green.shade50 : null,
@@ -500,14 +487,11 @@ class _ProgramListScreenState extends State<ProgramListScreen>
                       ],
                     ),
 
-                    // 4. COMPACT SPACING (Reduced from 12 to 6)
                     const SizedBox(height: 6),
 
-                    // MIDDLE ROW: Speaker Name & Rewards
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // Left: Unified Person Emoji & Speaker Name
                         if (program.speaker != null &&
                             program.speaker!.isNotEmpty)
                           Expanded(
@@ -535,7 +519,6 @@ class _ProgramListScreenState extends State<ProgramListScreen>
                           )
                         else
                           const SizedBox(), // Empty space if no speaker
-                        // Right: Rewards
                         Row(
                           children: [
                             if (program.offersCertificate) ...[
@@ -557,10 +540,7 @@ class _ProgramListScreenState extends State<ProgramListScreen>
                       ],
                     ),
 
-                    // 5. COMPACT SPACING (Reduced from 8 to 4)
                     const SizedBox(height: 4),
-
-                    // BOTTOM ROW: Location & Dates (Left) and Gradient Held By (Right)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -574,14 +554,14 @@ class _ProgramListScreenState extends State<ProgramListScreen>
                                 _getLocationIcon(program.locationType),
                                 size: 11,
                                 color: const Color(0xFFFF6B35),
-                              ), // Brand Orange
+                              ),
                               const SizedBox(width: 4),
                               Text(
                                 program.locationType,
                                 style: TextStyle(
                                   color: Colors.grey.shade600,
                                   fontSize: 11,
-                                ), // Font size untouched from last step
+                                ),
                               ),
                               const SizedBox(width: 4),
                               Text(
@@ -604,7 +584,7 @@ class _ProgramListScreenState extends State<ProgramListScreen>
                                   style: TextStyle(
                                     color: Colors.grey.shade600,
                                     fontSize: 11,
-                                  ), // Font size untouched
+                                  ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -613,7 +593,6 @@ class _ProgramListScreenState extends State<ProgramListScreen>
                           ),
                         ),
                         const SizedBox(width: 8),
-                        // Right Side: Gradient "Held By" platform name
                         ShaderMask(
                           shaderCallback: (bounds) =>
                               _brandGradient.createShader(bounds),
@@ -621,8 +600,7 @@ class _ProgramListScreenState extends State<ProgramListScreen>
                             program.host,
                             style: const TextStyle(
                               color: Colors.white, // Mask requires white text
-                              fontSize:
-                                  16, // Font size untouched from last step
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               fontStyle: FontStyle.italic,
                             ),

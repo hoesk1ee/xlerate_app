@@ -26,7 +26,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
   final TextEditingController _tagController = TextEditingController();
   final TextEditingController _skillController = TextEditingController();
 
-  // State Variables & Toggles
+  // Event Details
   File? _selectedImage;
   bool _createFeedback = true;
   bool _isMultiDay = false;
@@ -40,7 +40,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
   TimeOfDay? _selectedTime;
   DateTime? _deadlineDate;
 
-  // Tags & Skills
+  // Event Tags
   final List<String> _selectedTags = [];
   final List<String> _suggestedTags = [
     'Tech',
@@ -61,7 +61,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
     'Productivity',
   ];
 
-  // --- Date Pickers with Guardrails ---
+  // Date Picker
   Future<void> _selectStartDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -72,11 +72,9 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
     if (picked != null) {
       setState(() {
         _startDate = picked;
-        // Guardrail: If deadline is now AFTER the new start date, clear the deadline
         if (_deadlineDate != null && _deadlineDate!.isAfter(_startDate!)) {
           _deadlineDate = null;
         }
-        // Guardrail: If end date is BEFORE new start date, clear end date
         if (_endDate != null && _endDate!.isBefore(_startDate!)) {
           _endDate = null;
         }
@@ -92,7 +90,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _startDate!,
-      firstDate: _startDate!, // Guardrail: Cannot end before it starts
+      firstDate: _startDate!,
       lastDate: DateTime(2030),
     );
     if (picked != null) setState(() => _endDate = picked);
@@ -109,8 +107,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
           ? DateTime.now()
           : _startDate!,
       firstDate: DateTime.now(),
-      lastDate:
-          _startDate!, // Guardrail: Deadline strictly capped at Event Start Date
+      lastDate: _startDate!,
     );
     if (picked != null) setState(() => _deadlineDate = picked);
   }
@@ -137,8 +134,9 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null)
+    if (pickedFile != null) {
       setState(() => _selectedImage = File(pickedFile.path));
+    }
   }
 
   @override
@@ -173,7 +171,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Image Upload
+              // Image Picker
               GestureDetector(
                 onTap: _pickImage,
                 child: Container(
@@ -202,7 +200,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Group 1: Basic Info
+              // Program Info
               _buildSectionCard(
                 title: 'EVENT DETAILS',
                 children: [
@@ -237,7 +235,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Group 2: Logistics & Multi-Day
+              // Program Date or Duration
               _buildSectionCard(
                 title: 'LOGISTICS',
                 children: [
@@ -256,12 +254,12 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
                           const Text('Single', style: TextStyle(fontSize: 12)),
                           Switch(
                             value: _isMultiDay,
-                            activeColor: const Color(0xFF5E5CE6),
+                            activeThumbColor: const Color(0xFF5E5CE6),
                             onChanged: (val) => setState(() {
                               _isMultiDay = val;
-                              if (!val)
-                                _endDate =
-                                    null; // Clear end date if switched back to single
+                              if (!val) {
+                                _endDate = null;
+                              } // Clear end date if switched back to single
                             }),
                           ),
                           const Text(
@@ -298,7 +296,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Location Type Toggle
+                  // Program Location
                   Row(
                     children: [
                       _buildFilterChip(
@@ -357,7 +355,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Group 3: Audience & Fees
+              // Audience & Fees
               _buildSectionCard(
                 title: 'AUDIENCE & PRICING',
                 children: [
@@ -382,7 +380,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
                           const Text('Paid', style: TextStyle(fontSize: 12)),
                           Switch(
                             value: _isFree,
-                            activeColor: Colors.green,
+                            activeThumbColor: Colors.green,
                             onChanged: (val) => setState(() {
                               _isFree = val;
                               if (val) _feeController.clear();
@@ -414,7 +412,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Group 4: Description & Tags
+              // Program Description
               _buildSectionCard(
                 title: 'ADDITIONAL INFO',
                 children: [
@@ -427,7 +425,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Event URL Field
+                  // Event URL
                   _buildLabeledInputField(
                     label: 'Event URL',
                     hint: 'Enter a link for more info...',
@@ -435,7 +433,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Tags Manager
+                  // Tags
                   _buildListManager(
                     label: 'Event Tags',
                     hint: 'Type or Select tags...',
@@ -445,9 +443,9 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Skills Manager
+                  // Skills
                   _buildListManager(
-                    label: 'Skills Gained',
+                    label: 'Skillset',
                     hint: 'Add skills...',
                     controller: _skillController,
                     selectedList: _selectedSkills,
@@ -482,7 +480,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Group 5: Administration
+              // Additional Info
               _buildSectionCard(
                 title: 'ADMINISTRATION',
                 children: [
@@ -528,7 +526,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
               ),
               const SizedBox(height: 40),
 
-              // Submit Button with Validation
+              // Submit Button
               SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -561,13 +559,11 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
 
   // Submit Logic
   void _submitForm() {
-    // 1. Trigger Form Validation
     if (!_formKey.currentState!.validate()) {
       _showErrorSnackBar('Please fill out all required fields.');
       return;
     }
 
-    // 2. Validate Manual Pickers (Dates & Times)
     if (_startDate == null ||
         _deadlineDate == null ||
         _selectedTime == null ||
@@ -576,7 +572,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
       return;
     }
 
-    // 3. Create Data Object
+    // Program Data
     final newProgram = Program(
       title: _titleController.text.trim(),
       description: _descriptionController.text.trim(),
@@ -600,10 +596,9 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
       imageFile: _selectedImage,
     );
 
-    // 4. Save and Navigate
     globalPrograms.insert(0, newProgram);
 
-    // Safeguard 3: Show Success Snackbar before navigating
+    //Show Success Snackbar
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Row(
@@ -618,7 +613,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
       ),
     );
 
-    // 5. Navigate
+    // Navigate to CreateFeedbackFormScreen if selected Yes.
     if (_createFeedback) {
       Navigator.pushReplacement(
         context,
@@ -630,8 +625,6 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
       Navigator.pop(context, true);
     }
   }
-
-  // --- UI HELPER WIDGETS ---
 
   Widget _buildSectionCard({
     required String title,
@@ -689,8 +682,9 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
               : TextInputType.text,
           validator: isRequired
               ? (value) {
-                  if (value == null || value.trim().isEmpty)
+                  if (value == null || value.trim().isEmpty) {
                     return 'This field is required';
+                  }
                   return null;
                 }
               : null,
@@ -924,7 +918,6 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
     );
   }
 
-  // This helper method needs to be inside the class to be accessible
   Widget _buildLabeledInputField({
     required String label,
     required String hint,
@@ -947,6 +940,8 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
     );
   }
 }
+
+// TODO: CreateFeedbackFormScreen
 
 class CreateFeedbackFormScreen extends StatelessWidget {
   const CreateFeedbackFormScreen({super.key});
