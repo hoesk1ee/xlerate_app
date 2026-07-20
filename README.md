@@ -15,6 +15,7 @@ Xlerate bridges the gap between event discovery (workshops & programs) and perso
 - [User Journeys](#user-journeys)
 - [Navigation Flow](#navigation-flow)
 - [Screens Overview](#screens-overview)
+- [App Preview](#app-preview)
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
 - [Project Status](#project-status)
@@ -148,6 +149,25 @@ Based on the current wireframes, the following screens are designed or in progre
 | Submit Feedback Screen | Learner rates and comments after a program |
 
 > Wireframes for these screens are maintained in Whimsical; see `/design` for exported references as they're finalized.
+
+## App Preview
+
+### Learner Experience
+| Login Screen | Register Screen | Home Dashboard | Program List |
+| :---: | :---: | :---: | :---: |
+| <img src="docs/login-screen.png" width="200"/> | <img src="docs/register-screen.png" width="200"/> | <img src="docs/home-dashboard.png" width="200"/> | <img src="docs/program-list-screen.png" width="200"/> |
+| Login | Register | Home Dashboard | Program List |
+
+| Program Detail | Profile Screen | Submit Feedback |
+| :---: | :---: | :---: |
+| <img src="docs/program-detail-screen.png" width="200"/> | <img src="docs/profile-screen.png" width="200"/> | <img src="docs/feedback-screen.png" width="200"/> |
+| Program Detail | Profile | Feedback Form |
+
+### Admin Management
+| Create Announcement | Create Feedback Form |
+| :---: | :---: |
+| <img src="docs/create-announcement-screen.png" width="200"/> | <img src="docs/create-feedback-screen.png" width="200"/> |
+| Create Announcement | Create Feedback |
 
 ## Tech Stack
 
