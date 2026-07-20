@@ -9,7 +9,7 @@ class CreateFeedbackFormScreen extends StatefulWidget {
 }
 
 class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
-  // 1. We manage dynamic text fields using Lists of Controllers
+  //Dynamic text fields
   final List<TextEditingController> _linearControllers = [
     TextEditingController(),
     TextEditingController(),
@@ -19,7 +19,7 @@ class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
     TextEditingController(),
   ];
 
-  // State for the interactive checklist
+  // Interactive checklist
   final List<Map<String, dynamic>> _checklistQuestions = [
     {'title': 'Is the interface easy to navigate?', 'isChecked': true},
     {'title': 'Is the design clean?', 'isChecked': false},
@@ -31,7 +31,6 @@ class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
     },
   ];
 
-  // Good practice: Always clean up controllers to prevent memory leaks!
   @override
   void dispose() {
     for (var controller in _linearControllers) {
@@ -43,7 +42,7 @@ class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
     super.dispose();
   }
 
-  // Helper to dynamically generate "First", "Second", "Third" labels
+  // Auto generate "First", "Second", "Third" labels
   String _getOrdinal(int index) {
     const ordinals = [
       'First',
@@ -116,7 +115,7 @@ class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
             ),
             const SizedBox(height: 24),
 
-            // --- SECTION 1: Linear Scale Questions ---
+            // Linear Scale Questions
             _buildSectionHeader(
               'Linear scale questions (1 = Poor, 5 = Excellent)',
             ),
@@ -144,7 +143,7 @@ class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
               },
             ),
 
-            // --- SECTION 2: Open-ended Questions ---
+            // Open-ended Questions
             _buildSectionHeader('Open-ended questions'),
             const SizedBox(height: 12),
             ...List.generate(
@@ -168,7 +167,7 @@ class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
               },
             ),
 
-            // --- SECTION 3: Checklist Questions ---
+            // Checklist Questions
             _buildSectionHeader('Checklist questions'),
             const SizedBox(height: 12),
             ...List.generate(
@@ -187,7 +186,7 @@ class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
             ),
             const SizedBox(height: 12),
 
-            // --- SUBMIT BUTTON ---
+            // SUBMIT BUTTON
             SizedBox(
               width: double.infinity,
               height: 48,
@@ -200,7 +199,7 @@ class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
                   elevation: 0,
                 ),
                 onPressed: () {
-                  // TODO: Handle save logic
+                  // TODO:Save logic
                 },
                 child: const Text(
                   "Save & Link to Program",
@@ -219,10 +218,6 @@ class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
     );
   }
 
-  // ==========================================
-  // REUSABLE HELPER WIDGETS
-  // ==========================================
-
   Widget _buildSectionHeader(String title) {
     return Row(
       children: [
@@ -240,7 +235,6 @@ class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
     );
   }
 
-  // Added TextEditingController as a required parameter
   Widget _buildQuestionField(
     String label,
     String hintText,
@@ -259,7 +253,7 @@ class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
         ),
         const SizedBox(height: 6),
         TextFormField(
-          controller: controller, // Bound the controller to the field
+          controller: controller,
           maxLines: 3,
           decoration: InputDecoration(
             hintText: hintText,
@@ -289,13 +283,11 @@ class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
     );
   }
 
-  // Added a VoidCallback so each link can trigger its specific list update
   Widget _buildAddAnotherLink({required VoidCallback onTap}) {
     return Align(
       alignment: Alignment.centerRight,
       child: InkWell(
-        onTap:
-            onTap, // Triggers the specific setState provided in the build method
+        onTap: onTap,
         child: const Padding(
           padding: EdgeInsets.only(top: 8.0, bottom: 16.0),
           child: Text(

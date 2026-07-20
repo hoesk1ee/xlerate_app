@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../data/program_data.dart';
+import 'create_feedback_form_screen.dart';
 
 class CreateProgramScreen extends StatefulWidget {
   const CreateProgramScreen({super.key});
@@ -937,45 +938,6 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
         ),
         const SizedBox(height: 16),
       ],
-    );
-  }
-}
-
-// TODO: CreateFeedbackFormScreen
-
-class CreateFeedbackFormScreen extends StatelessWidget {
-  const CreateFeedbackFormScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Create Feedback Form',
-          style: TextStyle(color: Colors.black),
-        ),
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.build, size: 80, color: Colors.grey),
-            const SizedBox(height: 20),
-            const Text(
-              'Feedback Form Screen\nUnder Construction!',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18, color: Colors.black54),
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Finish & Go Back'),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
