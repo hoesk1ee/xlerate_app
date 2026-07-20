@@ -33,7 +33,7 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
 
           // * Programs List
-          programList(),
+          programList(context),
         ],
       ),
     );

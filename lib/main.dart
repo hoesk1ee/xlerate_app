@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xlerate/presentation/pages/profile/profile_screen.dart';
 import 'package:xlerate/presentation/pages/login_page.dart';
-import 'presentation/pages/feedback_page.dart';
+import 'package:xlerate/presentation/pages/program_list_screen.dart';
 
 void main() {
   runApp(const MyApp());

@@ -2,14 +2,74 @@ import 'package:flutter/material.dart';
 import 'package:xlerate/presentation/misc/methods.dart';
 import 'package:xlerate/presentation/pages/program/program_detail_page.dart';
 
-Widget programList() => Padding(
+// This import was added by Bishvajit to link the Program List Screen from the Dashboard.
+import '../../program_list_screen.dart'; // This links your new screen!
+
+// I added BuildContext context here so the Navigator works
+Widget programList(BuildContext context) => Padding(
   padding: const EdgeInsets.only(left: 16, right: 16),
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
-        "Best Program for You",
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+      // wrapped the Title and Button in a Row to put them on the same line
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            "Best Program for You",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+
+          // The new Browse Programs button
+          Container(
+            decoration: BoxDecoration(
+              // The Excelerate Orange to Magenta Gradient
+              gradient: const LinearGradient(
+                colors: [Color(0xFFFF6B35), Color(0xFFE31B6D)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(25),
+              // Glowing effect using the brand's pink color
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFFE31B6D).withAlpha(102),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(25),
+                // The ripple animation colors when tapped
+                splashColor: Colors.white.withAlpha(102),
+                highlightColor: Colors.white.withAlpha(25),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const ProgramListScreen(isAdmin: true),
+                    ),
+                  );
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Text(
+                    "Browse Programs",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
 
       verticalSpaces(8),
