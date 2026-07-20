@@ -63,7 +63,7 @@ Widget announcementBanner(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 8.0),
+                      verticalSpaces(8),
                       Text(
                         item['desc']!,
                         style: const TextStyle(

@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:xlerate/presentation/misc/methods.dart';
+import 'package:xlerate/presentation/pages/profile/profile_screen.dart';
 
-Widget dashboardHeader() => Padding(
+Widget dashboardHeader(BuildContext context) => Padding(
   padding: const EdgeInsets.all(16),
   child: Row(
     children: [
-      CircleAvatar(
-        radius: 36,
+      GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfileScreen(),
+            ),
+          );
+        },
+        child: CircleAvatar(
+          radius: 36,
+        ),
       ),
 
       horizontalSpaces(16),
