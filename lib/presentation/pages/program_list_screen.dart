@@ -89,18 +89,7 @@ class _ProgramListScreenState extends State<ProgramListScreen>
       appBar: AppBar(
         backgroundColor: const Color(0xFFFBFBFB),
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black87,
-            size: 20,
-          ),
-          onPressed: () {
-            if (Navigator.canPop(context)) {
-              Navigator.pop(context);
-            }
-          },
-        ),
+
         title: ShaderMask(
           shaderCallback: (bounds) => _brandGradient.createShader(bounds),
           child: const Text(

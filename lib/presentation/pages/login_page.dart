@@ -88,11 +88,12 @@ class _LoginPageState extends State<LoginPage> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (form.currentState!.validate()) {
-                        Navigator.push(
+                        Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
                             builder: (context) => MainPage(),
                           ),
+                          ModalRoute.withName('/'),
                         );
                       }
                     },

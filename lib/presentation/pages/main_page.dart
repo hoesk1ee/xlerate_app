@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:xlerate/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:xlerate/presentation/pages/productivity_page.dart';
-import 'package:xlerate/presentation/pages/program_list_page.dart';
+import 'package:xlerate/presentation/pages/program_list_screen.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -16,7 +16,7 @@ class _MainPageState extends State<MainPage> {
 
   final List<Widget> _screens = [
     const DashboardPage(),
-    const ProgramListPage(),
+    const ProgramListScreen(),
     const ProductivityPage(),
   ];
 
