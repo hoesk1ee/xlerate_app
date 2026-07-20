@@ -1,22 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "Create Announcement",
-      home: const CreateAnnouncementScreen(),
-    );
-  }
-}
-
 class CreateAnnouncementScreen extends StatefulWidget {
   const CreateAnnouncementScreen({super.key});
 
@@ -25,13 +8,12 @@ class CreateAnnouncementScreen extends StatefulWidget {
       _CreateAnnouncementScreenState();
 }
 
-class _CreateAnnouncementScreenState
-    extends State<CreateAnnouncementScreen> {
-  final TextEditingController titleController =
-  TextEditingController(text: "Survey Reminder");
+class _CreateAnnouncementScreenState extends State<CreateAnnouncementScreen> {
+  final TextEditingController titleController = TextEditingController(
+    text: "Survey Reminder",
+  );
 
-  final TextEditingController messageController =
-  TextEditingController(
+  final TextEditingController messageController = TextEditingController(
     text: "Submit your feedback for us till 13 July 2026",
   );
 
@@ -49,13 +31,10 @@ class _CreateAnnouncementScreenState
 
           child: Column(
             children: [
-
               //---------------- App Bar ----------------//
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-
                   _circleButton(Icons.arrow_back_ios_new),
 
                   const Text(
@@ -68,7 +47,6 @@ class _CreateAnnouncementScreenState
                   ),
 
                   _circleButton(Icons.add),
-
                 ],
               ),
 
@@ -77,20 +55,16 @@ class _CreateAnnouncementScreenState
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       //---------------- Image ----------------//
-
                       Container(
                         height: 170,
                         width: double.infinity,
 
                         decoration: BoxDecoration(
                           color: const Color(0xffE8ECF3),
-                          borderRadius:
-                          BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(4),
                         ),
 
                         child: const Center(
@@ -105,7 +79,6 @@ class _CreateAnnouncementScreenState
                       const SizedBox(height: 15),
 
                       //---------------- Title ----------------//
-
                       const Text(
                         "Announcement Title",
                         style: TextStyle(
@@ -121,8 +94,7 @@ class _CreateAnnouncementScreenState
 
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          contentPadding:
-                          const EdgeInsets.symmetric(
+                          contentPadding: const EdgeInsets.symmetric(
                             horizontal: 12,
                             vertical: 10,
                           ),
@@ -132,7 +104,6 @@ class _CreateAnnouncementScreenState
                       const SizedBox(height: 15),
 
                       //---------------- Message ----------------//
-
                       const Text(
                         "Message",
                         style: TextStyle(
@@ -155,7 +126,6 @@ class _CreateAnnouncementScreenState
                       const SizedBox(height: 15),
 
                       //---------------- Priority ----------------//
-
                       const Text(
                         "Announcement Priority",
                         style: TextStyle(
@@ -168,11 +138,9 @@ class _CreateAnnouncementScreenState
 
                       Row(
                         children: [
-
                           ChoiceChip(
                             label: const Text("Urgent"),
-                            selected:
-                            priority == "Urgent",
+                            selected: priority == "Urgent",
 
                             onSelected: (value) {
                               setState(() {
@@ -185,8 +153,7 @@ class _CreateAnnouncementScreenState
 
                           ChoiceChip(
                             label: const Text("Normal"),
-                            selected:
-                            priority == "Normal",
+                            selected: priority == "Normal",
 
                             onSelected: (value) {
                               setState(() {
@@ -194,14 +161,12 @@ class _CreateAnnouncementScreenState
                               });
                             },
                           ),
-
                         ],
                       ),
 
                       const SizedBox(height: 20),
 
                       //---------------- Notification ----------------//
-
                       const Text(
                         "Send Notification to learners?",
                         style: TextStyle(
@@ -212,24 +177,19 @@ class _CreateAnnouncementScreenState
 
                       Row(
                         children: [
-
                           Expanded(
                             child: RadioListTile<bool>(
                               dense: true,
-                              contentPadding:
-                              EdgeInsets.zero,
+                              contentPadding: EdgeInsets.zero,
                               title: const Text(
                                 "Send notification",
-                                style:
-                                TextStyle(fontSize: 13),
+                                style: TextStyle(fontSize: 13),
                               ),
                               value: true,
-                              groupValue:
-                              sendNotification,
+                              groupValue: sendNotification,
                               onChanged: (value) {
                                 setState(() {
-                                  sendNotification =
-                                  value!;
+                                  sendNotification = value!;
                                 });
                               },
                             ),
@@ -238,25 +198,20 @@ class _CreateAnnouncementScreenState
                           Expanded(
                             child: RadioListTile<bool>(
                               dense: true,
-                              contentPadding:
-                              EdgeInsets.zero,
+                              contentPadding: EdgeInsets.zero,
                               title: const Text(
                                 "Don't send",
-                                style:
-                                TextStyle(fontSize: 13),
+                                style: TextStyle(fontSize: 13),
                               ),
                               value: false,
-                              groupValue:
-                              sendNotification,
+                              groupValue: sendNotification,
                               onChanged: (value) {
                                 setState(() {
-                                  sendNotification =
-                                  value!;
+                                  sendNotification = value!;
                                 });
                               },
                             ),
                           ),
-
                         ],
                       ),
                     ],
@@ -265,26 +220,21 @@ class _CreateAnnouncementScreenState
               ),
 
               //---------------- Button ----------------//
-
               SizedBox(
                 width: double.infinity,
                 height: 52,
 
                 child: ElevatedButton(
-
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                    const Color(0xff635BFF),
+                    backgroundColor: const Color(0xff635BFF),
 
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(4),
                     ),
                   ),
 
                   onPressed: () {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text(
                           "Announcement Created!",
@@ -302,7 +252,6 @@ class _CreateAnnouncementScreenState
                   ),
                 ),
               ),
-
             ],
           ),
         ),
