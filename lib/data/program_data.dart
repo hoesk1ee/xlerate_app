@@ -143,7 +143,25 @@ List<Program> globalPrograms = [
           isRequired: true,
         ),
 
-        // 3. Multiple Choice
+        // 3. Linear Scale Rating
+        SavedQuestion(
+          type: QuestionType.linearScale,
+          title:
+              "Rate the difficulty of the wireframing exercises (1: Too Easy, 5: Too Hard)",
+          options: ["1", "2", "3", "4", "5"],
+          isRequired: true,
+        ),
+
+        // 4. Yes / No
+        SavedQuestion(
+          type: QuestionType.yesNo,
+          title:
+              "Would you recommend this masterclass to a friend or colleague?",
+          options: ["Yes", "No"],
+          isRequired: true,
+        ),
+
+        // 5. Multiple Choice
         SavedQuestion(
           type: QuestionType.multipleChoice,
           title: "Which session format helped you learn the best?",
@@ -156,7 +174,7 @@ List<Program> globalPrograms = [
           isRequired: true,
         ),
 
-        // 4. Checkboxes
+        // 6. Checkboxes
         SavedQuestion(
           type: QuestionType.checkboxes,
           title: "Which tools do you currently use? (Select all that apply)",
@@ -164,27 +182,49 @@ List<Program> globalPrograms = [
           isRequired: false,
         ),
 
-        // 5. Linear Scale Rating
+        // 7. Dropdown
         SavedQuestion(
-          type: QuestionType.linearScale,
-          title:
-              "Rate the difficulty of the wireframing exercises (1: Too Easy, 5: Too Hard)",
-          options: ["1", "2", "3", "4", "5"],
+          type: QuestionType.dropdown,
+          title: "What is your current primary professional role?",
+          options: [
+            "UI/UX Designer",
+            "Product Manager",
+            "Software Developer",
+            "Graphic Designer",
+            "Student / Learner",
+          ],
           isRequired: true,
         ),
 
-        // 6. Short Answer
+        // 8. Short Answer
         SavedQuestion(
           type: QuestionType.shortText,
           title: "What was your single biggest takeaway from the course?",
-          options: [], // Options empty for text input
+          options: [],
           isRequired: true,
         ),
 
-        // 7. Paragraph Answer
+        // 9. Paragraph Answer (Long Text)
         SavedQuestion(
           type: QuestionType.longText,
           title: "Do you have any suggestions for improving future workshops?",
+          options: [],
+          isRequired: false,
+        ),
+
+        // 10. Date & File Upload
+        SavedQuestion(
+          type: QuestionType.date,
+          title:
+              "On which date did you complete your final project submission?",
+          options: [],
+          isRequired: true,
+        ),
+
+        SavedQuestion(
+          type: QuestionType.fileUpload,
+          title:
+              "Please upload your final Figma wireframe export (PDF or Image)",
           options: [],
           isRequired: false,
         ),

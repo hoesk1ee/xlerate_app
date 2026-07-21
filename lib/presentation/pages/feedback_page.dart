@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xlerate/data/program_data.dart';
+import 'package:file_picker/file_picker.dart';
 
 class FeedbackPage extends StatefulWidget {
   final SavedFeedbackForm form;
@@ -221,7 +222,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                               ? []
                               : [
                                   BoxShadow(
-                                    color: _brandOrange.withOpacity(0.4),
+                                    color: _brandOrange.withValues(alpha: 0.4),
                                     blurRadius: 12,
                                     offset: const Offset(0, 6),
                                   ),
@@ -636,49 +637,316 @@ class _FeedbackPageState extends State<FeedbackPage> {
           }
         },
       );
-    } else if (question.type == QuestionType.yesNo) {
-      String? selectedAnswer = _answers[qId];
+    } // YES / NO
+    else if (question.type == QuestionType.yesNo) {
+      String? selectedAnswer = _answers[qId] as String?;
+
       return Row(
-        children: ['Yes', 'No'].map((option) {
-          bool isSelected = selectedAnswer == option;
-          return Expanded(
+        children: [
+          // --- YES BUTTON ---
+          Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6.0),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: isSelected
-                        ? _brandOrange
-                        : Colors.transparent,
-                    side: BorderSide(
-                      color: isSelected ? _brandOrange : Colors.grey.shade300,
-                      width: 2,
+              padding: const EdgeInsets.only(right: 8.0),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(12),
+                onTap: () {
+                  setState(() {
+                    _answers[qId] = "Yes";
+                    if (_showErrors) _showErrors = false;
+                  });
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  decoration: BoxDecoration(
+                    color: selectedAnswer == "Yes"
+                        ? Colors
+                              .green
+                              .shade600 // Vibrant green when selected
+                        : Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: selectedAnswer == "Yes"
+                          ? Colors.green.shade600
+                          : Colors.grey.shade300,
+                      width: selectedAnswer == "Yes" ? 2 : 1,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    boxShadow: selectedAnswer == "Yes"
+                        ? [
+                            BoxShadow(
+                              color: Colors.green.withAlpha(50),
+                              blurRadius: 8,
+                              spreadRadius: 2,
+                            ),
+                          ]
+                        : [],
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _answers[qId] = option;
-                      if (_showErrors) _showErrors = false;
-                    });
-                  },
+                  alignment: Alignment.center,
                   child: Text(
-                    option,
+                    "Yes",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: isSelected ? Colors.white : Colors.black87,
+                      color: selectedAnswer == "Yes"
+                          ? Colors.white
+                          : Colors.black87,
                     ),
                   ),
                 ),
               ),
             ),
+          ),
+
+          // --- NO BUTTON ---
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(12),
+                onTap: () {
+                  setState(() {
+                    _answers[qId] = "No";
+                    if (_showErrors) _showErrors = false;
+                  });
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  decoration: BoxDecoration(
+                    color: selectedAnswer == "No"
+                        ? Colors.red.shade500
+                        : Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: selectedAnswer == "No"
+                          ? Colors.red.shade500
+                          : Colors.grey.shade300,
+                      width: selectedAnswer == "No" ? 2 : 1,
+                    ),
+                    boxShadow: selectedAnswer == "No"
+                        ? [
+                            BoxShadow(
+                              color: Colors.red.withAlpha(50),
+                              blurRadius: 8,
+                              spreadRadius: 2,
+                            ),
+                          ]
+                        : [],
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    "No",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: selectedAnswer == "No"
+                          ? Colors.white
+                          : Colors.black87,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+    // DROPDOWN
+    else if (question.type == QuestionType.dropdown) {
+      String? selectedOption = _answers[qId] as String?;
+      return DropdownButtonFormField<String>(
+        value: selectedOption,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Colors.grey.shade300),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Colors.grey.shade300),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: _brandOrange, width: 2),
+          ),
+        ),
+        hint: Text(
+          "Select an option",
+          style: TextStyle(color: Colors.grey.shade400),
+        ),
+        items: question.options.map((opt) {
+          return DropdownMenuItem<String>(
+            value: opt,
+            child: Text(opt, style: const TextStyle(fontSize: 15)),
           );
         }).toList(),
+        onChanged: (val) {
+          setState(() {
+            _answers[qId] = val;
+            if (_showErrors) _showErrors = false;
+          });
+        },
+      );
+    }
+    // DATE PICKER
+    else if (question.type == QuestionType.date) {
+      DateTime? selectedDate = _answers[qId] as DateTime?;
+      String dateText = selectedDate == null
+          ? "Select Date"
+          : "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+
+      return InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () async {
+          DateTime? picked = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(1900),
+            lastDate: DateTime(2100),
+            builder: (context, child) {
+              return Theme(
+                // Brands the calendar with your Excelerate Orange
+                data: Theme.of(context).copyWith(
+                  colorScheme: ColorScheme.light(
+                    primary: _brandOrange,
+                    onPrimary: Colors.white,
+                    onSurface: Colors.black87,
+                  ),
+                ),
+                child: child!,
+              );
+            },
+          );
+          if (picked != null) {
+            setState(() {
+              _answers[qId] = picked;
+              if (_showErrors) _showErrors = false;
+            });
+          }
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey.shade300),
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                dateText,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: selectedDate == null
+                      ? Colors.grey.shade400
+                      : Colors.black87,
+                ),
+              ),
+              Icon(Icons.calendar_today, color: _brandOrange, size: 20),
+            ],
+          ),
+        ),
+      );
+    }
+    // FILE UPLOAD
+    else if (question.type == QuestionType.fileUpload) {
+      String? uploadedFileName = _answers[qId] as String?;
+      bool isUploading = uploadedFileName == "Uploading...";
+
+      return InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () async {
+          // Launch the native file picker
+          FilePickerResult? result = await FilePicker.platform.pickFiles(
+            type: FileType.any, // Lets them pick PDFs, images, docs, etc.
+          );
+
+          if (result != null) {
+            PlatformFile file = result.files.first;
+
+            // Show a quick loading
+            setState(() {
+              _answers[qId] = "Uploading...";
+              if (_showErrors) _showErrors = false;
+            });
+
+            // A tiny delay so the UI spinner shows briefly
+            await Future.delayed(const Duration(milliseconds: 500));
+
+            if (mounted) {
+              setState(() {
+                _answers[qId] = file.name;
+              });
+            }
+          }
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: uploadedFileName != null && !isUploading
+                  ? _brandOrange
+                  : Colors.grey.shade300,
+              width: uploadedFileName != null && !isUploading ? 2 : 1,
+            ),
+            borderRadius: BorderRadius.circular(12),
+            color: uploadedFileName != null && !isUploading
+                ? _brandOrange.withAlpha(15)
+                : Colors.white,
+          ),
+          child: Center(
+            child: Column(
+              children: [
+                if (isUploading)
+                  SizedBox(
+                    height: 40,
+                    width: 40,
+                    child: CircularProgressIndicator(
+                      color: _brandOrange,
+                      strokeWidth: 3,
+                    ),
+                  )
+                else
+                  Icon(
+                    uploadedFileName != null
+                        ? Icons.check_circle
+                        : Icons.cloud_upload_outlined,
+                    size: 40,
+                    color: uploadedFileName != null
+                        ? Colors.green
+                        : _brandOrange,
+                  ),
+                const SizedBox(height: 12),
+                Text(
+                  isUploading
+                      ? "Reading file..."
+                      : (uploadedFileName != null
+                            ? "Attached: $uploadedFileName"
+                            : "Tap to browse files"),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: uploadedFileName != null && !isUploading
+                        ? Colors.black87
+                        : Colors.grey.shade500,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow
+                      .ellipsis, // Prevents giant file names from breaking the UI
+                ),
+              ],
+            ),
+          ),
+        ),
       );
     }
     return const SizedBox();

@@ -182,28 +182,89 @@ class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
         actions: [
           TextButton(
             onPressed: () {
+              // --- VALIDATION CHECKS ---
+              if (_formDescController.text.trim().isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Please provide a form description."),
+                    backgroundColor: Colors.redAccent,
+                  ),
+                );
+                return; // Stop the save process
+              }
+
+              if (_questions.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Please add at least one question."),
+                    backgroundColor: Colors.redAccent,
+                  ),
+                );
+                return;
+              }
+
+              bool hasEmptyTitles = _questions.any(
+                (q) => q.titleController.text.trim().isEmpty,
+              );
+              if (hasEmptyTitles) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      "All questions must have a title before publishing.",
+                    ),
+                    backgroundColor: Colors.redAccent,
+                  ),
+                );
+                return;
+              }
+              bool hasInvalidOptions = _questions.any((q) {
+                if (q.type == QuestionType.multipleChoice ||
+                    q.type == QuestionType.checkboxes ||
+                    q.type == QuestionType.dropdown) {
+                  // Fails if there are 0 options, OR if any existing option is blank
+                  if (q.optionsControllers.isEmpty) return true;
+                  return q.optionsControllers.any(
+                    (controller) => controller.text.trim().isEmpty,
+                  );
+                }
+                return false;
+              });
+
+              if (hasInvalidOptions) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      "Please fill all the answer options.",
+                    ),
+                    backgroundColor: Colors.redAccent,
+                  ),
+                );
+                return;
+              }
+
+              // If all validation passes, compile the questions!
               List<SavedQuestion> compiledQuestions = _questions.map((q) {
                 return SavedQuestion(
-                  title: q.titleController.text.isNotEmpty
-                      ? q.titleController.text
-                      : "Untitled Question",
+                  title: q.titleController.text.trim(),
                   type: q.type,
                   isRequired: q.isRequired,
-                  options: q.optionsControllers.map((c) => c.text).toList(),
+                  options: q.optionsControllers
+                      .map((c) => c.text.trim())
+                      .toList(),
                 );
               }).toList();
 
               // Final Form
               SavedFeedbackForm newForm = SavedFeedbackForm(
                 id: UniqueKey().toString(),
-                title: _formTitleController.text.isNotEmpty
-                    ? _formTitleController.text
+                title: _formTitleController.text.trim().isNotEmpty
+                    ? _formTitleController.text.trim()
                     : "Untitled Form",
-                description: _formDescController.text,
+                description: _formDescController.text.trim(),
                 questions: compiledQuestions,
               );
 
-              // Attach the form to our mock database (the first program)
+              // Attach the form to our mock database
               globalPrograms[0].feedbackForm = newForm;
 
               // Success message
@@ -273,6 +334,34 @@ class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
 
   // UI BUILDER
 
+  // Made the duplicate question button functional
+  void _duplicateQuestion(int index, FormQuestion source) {
+    setState(() {
+      // 1. Create a new question of the same type
+      FormQuestion newQuestion = FormQuestion(type: source.type);
+
+      // 2. Copy the title and append "(Copy)"
+      newQuestion.titleController.text =
+          "${source.titleController.text} (Copy)";
+
+      // 3. Copy required status
+      newQuestion.isRequired = source.isRequired;
+
+      // 4. Copy options if it's a multiple choice/dropdown/checkbox question,etc...
+      if (source.optionsControllers.isNotEmpty) {
+        newQuestion.optionsControllers.clear();
+        for (var optionController in source.optionsControllers) {
+          newQuestion.optionsControllers.add(
+            TextEditingController(text: optionController.text),
+          );
+        }
+      }
+
+      // 5. Insert it directly below the original question
+      _questions.insert(index + 1, newQuestion);
+    });
+  }
+
   Widget _buildMenuOption(IconData icon, String label, QuestionType type) {
     return InkWell(
       onTap: () => _addQuestion(type),
@@ -311,7 +400,7 @@ class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
           borderRadius: BorderRadius.circular(12),
           border: const Border(
             top: BorderSide(color: Color(0xFF6B4EFF), width: 8),
-          ), // Branded top banner
+          ), //
         ),
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -386,28 +475,42 @@ class _CreateFeedbackFormScreenState extends State<CreateFeedbackFormScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Icon(
-                  Icons.content_copy,
-                  size: 20,
-                  color: Colors.black54,
-                ),
-                const SizedBox(width: 16),
+                // 1. DELETE BUTTON (Left)
                 InkWell(
                   onTap: () {
                     setState(() {
-                      question.dispose();
-                      _questions.remove(question);
+                      question.dispose(); // Free up memory
+                      _questions.remove(question); // Remove from list
                     });
                   },
-                  child: const Icon(
-                    Icons.delete_outline,
-                    size: 22,
-                    color: Colors.redAccent,
+                  child: const Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: Icon(
+                      Icons.delete_outline,
+                      size: 22,
+                      color: Colors.redAccent,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 16),
+
+                // 2. COPY BUTTON (Right)
+                InkWell(
+                  onTap: () => _duplicateQuestion(index, question),
+                  child: const Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: Icon(
+                      Icons.content_copy,
+                      size: 20,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+
                 Container(width: 1, height: 24, color: Colors.grey.shade300),
                 const SizedBox(width: 16),
+
                 const Text(
                   "Required",
                   style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
